@@ -8,6 +8,16 @@
 \usepackage{amssymb}
 \usepackage{gensymb}
 \usepackage{subfig}
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{subfig}
 \usepackage{mathrsfs}
 \usepackage{amsmath}
 \usepackage{biblatex}
@@ -38,14 +48,37 @@ Orthogonal Frequency Division Multiplexing (OFDM) is a modulation technique that
 A Fourier transform is a mathematical tool that translates functions of time or space into functions of temporal or spatial frequencies. Every signal in the world can be imagined as a sum of simple sinusoids at different frequencies.    
 
 \subsection{Continuous Time Fourier Transform}
+The Continuous (time) Fourier transform is a form of the Fourier transform that can be performed on continuous time signal, x(t). Examples of continuous systems are sine waves and analog sound signals. 
+
+The Fourier Transform of a continuous signal can be determined using the formula:
+
+\begin{equation}
+    X(\omega) = \int_{-\infty}^{\infty} x(t)e^{-j\omega t} dt
+\end{equation}
+where $\omega \in (-\infty,+\infty)$
+
+Which allows us to obtain the frequency domain form of our original signal.
 
 \subsection{Discrete Time Fourier Transform}
+The Discrete Fourier Transform is a form of the Fourier Transform that can be performed on Discrete time signals. Discrete time signals are signals that have a finite sequence of equally spaced samples, defined by a set sampling frequency. We often work with discrete time signals in digital signal processing. 
 
+The Fourier Transform of a Discrete Time signal can be determined using the formula:
+\begin{equation}
+    X[\omega] = \Sigma_{n=-\infty}^{+\infty} x[k]e^{-j \omega k}
+\end{equation}
+
+where $\omega \in |-\pi,+\pi|$
 \subsubsection{Fast Fourier Transform}
+The Fast Fourier Transform is an algorithm that can determine either the Discrete Fourier transform of a given sequence or the Inverse Fourier transform of a sequence.
 
-\subsubsection{Inverse Fast Fourier Transform}
+[Explain more about how the algorithm works]
+
+\subsubsubsection{Cooley-Tukey algorithm}
+- Commonly used FFT algorithm
+
 
 \section{Orthogonal Frequency Division Multiplexing}
+
 
 \begin{figure}
     \centering
