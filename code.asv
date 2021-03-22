@@ -109,34 +109,28 @@ y_m = y_m(shift1:end);
 x_train_load = transpose(x_train_load);
 
 % Transmit data through nonflat channel function
-y_m_train = nonflat_channel(x_train_load);
+y_train = nonflat_channel(x_train_load);
 
 % Determine Lag in Data
-[y1x1_train,lag1] = xcorr(y_m_train,x_train_load); 
-[~, Index1_train] = max(abs(y1x1_train));
-shift1_train = lag1(Index1_train);
+[y1x1,lag1] = xcorr(y_m,x_train_load); 
+[~, Index1] = max(abs(y1x1));
+shift1 = lag1(Index1);
 %Comes out to be 9
 
 %Cut Data from Lag
-y_m_train = y_m_train(shift1_train:end);
+y_m = y_m(shift1:end);
 
 
 
 %% FFT - Fast Fourier Transform of Received Data
 Y_k = fft(y_m,size_X);
-Y_k_train = fft(y_m_train,size_training_data);
+
 
 figure;
 stem(Y_k);
 hold on
 title('Received Data')
 hold off
-
-%%  Channel Estimation
-
-H_k = Y_k_train./X_train;
-
-
 %% Transmitted Vs Received Data
 % Calculating Error
 
