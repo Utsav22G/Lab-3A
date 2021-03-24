@@ -120,8 +120,6 @@ shift1_train = lag1(Index1_train);
 %Cut Data from Lag
 y_m_train = y_m_train(shift1_train:end);
 
-
-
 %% FFT - Fast Fourier Transform of Received Data
 Y_k = fft(y_m,size_X);
 Y_k_train = fft(y_m_train,size_training_data);
@@ -131,10 +129,24 @@ stem(Y_k);
 hold on
 title('Received Data')
 hold off
+%%  Channel Estimation 
 
-%%  Channel Estimation
+% With OFDM, we are assuming flat fading model for every 64 bits of data,
+% giving us 100 different transfer functions
 
-H_k = Y_k_train./X_train;
+H_k = zeros(100,1); %Empty vector to put transfer function values
+
+for H = 1:1:n_data   % For each chunk of 64 -> 100 in total
+    ChannelEst_n = mean(Y_k(1 + 64*(H-1): 64*(H))); % Calculates transfer function for every 64 bits (assuming flat fading model)
+    H_k(H) = ChannelEst_n; %Place data into Transfer function matrix
+end
+figure;
+stem(H_k);
+hold on
+title('Transfer Functions of Data');
+hold off
+%% Filtering out White Noise
+
 
 
 %% Transmitted Vs Received Data
