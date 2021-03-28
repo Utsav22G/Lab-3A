@@ -18,12 +18,12 @@ L = 64; %Length of Pulse - 64
 
 pulse = ones(L, 1); %Creates pulse with L of 64 bits
 
-x_0 = zeros(L*length(x_m),1);       % Creates "empty" vector that is lenght of desired data: 409600 bits
+x_0 = zeros(L*length(x_m),1);       % Creates "empty" vector that is length of desired data: 409600 bits
 x_0(1:L:end) = x_m;                 % assign every Symbol_period-th sample to equal a value from bits
 x_m_pulse = conv(pulse, x_0);       % Convolve vector by designed pulse
 x_m_pulse= x_m_pulse(1:409600);     % Cut extra zeros caused by convolution - desired length of 409600 bits
 
-x_t = zeros(L*length(x_train),1);       % Creates "empty" vector that is lenght of desired data: 409600 bits
+x_t = zeros(L*length(x_train),1);       % Creates "empty" vector that is length of desired data: 409600 bits
 x_t(1:L:end) = x_train;                 % assign every Symbol_period-th sample to equal a value from bits
 x_train_pulse = conv(pulse, x_t);       % Convolve vector by designed pulse
 x_train_pulse = x_train_pulse(1:L*length(x_train));     % Cut extra zeros caused by convolution - desired length of 409600 bits
