@@ -11,15 +11,30 @@ X_k(X_k == 0) = -1;
 
 % Create training data
 num_train = 640;
-X_train = ones(1, num_train);
+X_train = zeros(1, num_train);
 
 % Combine training data and signal
 message = [X_train, X_k];
+
+figure(1)
+stem(message)
+xlabel('i-th Signal')
+ylabel('Magnitude')
+title('Transmitted Signal in freq domain')
+ylim([-2,2])
 
 %%  Move data to time domain
 
 % Perform inverse Fourier transform
 ifft_message = ifft(message);
+
+figure(2)
+stem(ifft_message)
+xlabel('i-th Signal')
+ylabel('Magnitude')
+title('Transmitted Signal in time domain')
+xlim([-1000, 8000])
+ylim([-0.04,0.04])
 
 %%  Perform cyclic convolution
 
@@ -47,7 +62,7 @@ tx_message = conv_message(1:(num_bits*(5/4)+num_train))'; % Truncate the trailin
 rx_message = nonflat_channel((tx_message));
 
 % Visualize data transmitted
-figure(1)
+figure(3)
 subplot(2,1,1)
 stem(tx_message)
 xlabel('i-th Signal')
@@ -74,14 +89,17 @@ peak = lags(idx);
 % Slice data according to lags and tx_data length
 sliced_rx = rx_message(peak:tx_len);
 
-figure
+figure(4)
 stem(sliced_rx)
+xlabel('i-th Signal')
+ylabel('Magnitude')
+title('Trimmed Rx Signal')
 
 %%  Move to frequency domain
 
-fft_rx = fft(sliced_rx, num_bits);
+fft_rx = fft(sliced_rx);
 
-figure(2)
+figure(5)
 stem(real(fft_rx));
 hold on
 title('Received Data - FFT')
@@ -97,6 +115,12 @@ rx_train = fft_rx(1:num_train);
 channel_response = zeros(1, num_train);
 
 sum = zeros(1, num_train);
+
+% for iter = 1:chunk
+%     sum(1, iter) = channel
+% end
+
+
 iter = 2;
 while iter <= num_train
     sum(1, iter) = (channel_response(1, (iter-1)) + rx_train(iter,1)) ./ tx_train(1, iter);
@@ -109,11 +133,37 @@ channel_estimate = sum(1,num_train)/num_train;
 
 tx_est = fft_rx(num_train+1:end) / channel_estimate;
 
-figure(3)
+figure(6)
 stem(tx_est);
 hold on
 title('Recovered Tx signal')
 hold off
+
+
+%%  Calculate Bit Error Rate (BER)
+
+% diff = real((real(X_k) - (real(Y_k)./abs(real(Y_k)))))./real(X_k);
+diff = real((real(X_k) - (real(Retrieved_data)./abs(real(Retrieved_data)))))./(2*real(X_k));
+% num_error = length(diff(diff==2));
+Error = abs(mean(diff)) *100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
