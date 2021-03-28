@@ -22,7 +22,6 @@ message = [X_train, X_k];
 ifft_message = ifft(message);
 
 %%  Perform cyclic convolution
-% also on training data
 
 % Cyclic prefix insertion
 pulse_width = 64;
@@ -98,7 +97,6 @@ rx_train = fft_rx(1:num_train);
 channel_response = zeros(1, num_train);
 
 sum = zeros(1, num_train);
-% fix indexing
 iter = 2;
 while iter <= num_train
     sum(1, iter) = (channel_response(1, (iter-1)) + rx_train(iter,1)) ./ tx_train(1, iter);
