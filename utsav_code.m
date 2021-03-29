@@ -68,6 +68,7 @@ stem(tx_message)
 xlabel('i-th Signal')
 ylabel('Magnitude')
 title('Transmitted Signal')
+xlim([-1000, length(tx_message)+1000])
 
 % Visualize data received
 subplot(2,1,2)
@@ -75,6 +76,7 @@ stem(rx_message)
 xlabel('i-th Signal')
 ylabel('Magnitude')
 title('Unfiltered Received Signal')
+xlim([-1000, length(rx_message)+1000])
 
 %%  Rx data alignment
 
@@ -84,16 +86,19 @@ rx_len = length(rx_message);
 % Determine the received data
 [cross_corr,lags] = xcorr(rx_message,tx_message); 
 [~, idx] = max(abs(cross_corr));
-peak = lags(idx);
+peak = lags(idx);   %   peak = 9
 
 % Slice data according to lags and tx_data length
-sliced_rx = rx_message(peak:tx_len);
+sliced_rx = rx_message(peak:tx_len+peak-1);   % 8640 samples
+% Matlab indexes at 1 and uses [], tx_len+peak-1 = 8640+9-1 = 8648
+% sliced_rx = rx_message(9:8648) = 8640 samples
 
 figure(4)
 stem(sliced_rx)
 xlabel('i-th Signal')
 ylabel('Magnitude')
 title('Trimmed Rx Signal')
+xlim([-1000, length(sliced_rx)+1000])
 
 %%  Move to frequency domain
 
@@ -101,9 +106,8 @@ fft_rx = fft(sliced_rx);
 
 figure(5)
 stem(real(fft_rx));
-hold on
 title('Received Data - FFT')
-hold off
+xlim([-1000, length(fft_rx)+1000])
 
 %%  Channel Estimation
 
@@ -135,17 +139,16 @@ tx_est = fft_rx(num_train+1:end) / channel_estimate;
 
 figure(6)
 stem(tx_est);
-hold on
 title('Recovered Tx signal')
-hold off
+xlim([-1000, length(tx_est)+1000])
 
 
-%%  Calculate Bit Error Rate (BER)
-
-% diff = real((real(X_k) - (real(Y_k)./abs(real(Y_k)))))./real(X_k);
-diff = real((real(X_k) - (real(Retrieved_data)./abs(real(Retrieved_data)))))./(2*real(X_k));
-% num_error = length(diff(diff==2));
-Error = abs(mean(diff)) *100
+% %%  Calculate Bit Error Rate (BER)
+% 
+% % diff = real((real(X_k) - (real(Y_k)./abs(real(Y_k)))))./real(X_k);
+% diff = real((real(X_k) - (real(Retrieved_data)./abs(real(Retrieved_data)))))./(2*real(X_k));
+% % num_error = length(diff(diff==2));
+% Error = abs(mean(diff)) *100
 
 
 
