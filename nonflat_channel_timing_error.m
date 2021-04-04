@@ -1,6 +1,6 @@
 function [ y ] = nonflat_channel_timing_error( x )
 
-SNR_dB = 30;  %nominal SNR in dB
+SNR_dB = 40;  %nominal SNR in dB
 
 SNR = 10^(SNR_dB/10); % nominal SNR 
 
